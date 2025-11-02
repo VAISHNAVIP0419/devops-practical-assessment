@@ -1,0 +1,135 @@
+# ===========================
+# 🌍 TERRAFORM CONFIGURATION
+# ===========================
+
+# Local Terraform state files
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Local crash logs
+crash.log
+crash.*.log
+
+# Terraform plan output files
+*.tfplan
+
+# Sensitive override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# .terraform directory (providers, plugins, modules)
+.terraform/
+.terraform.lock.hcl
+
+# Terraform variable files containing secrets
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+secrets.tfvars
+private.auto.tfvars
+
+# Terraform environment files
+.envrc
+.env
+
+# ===========================
+# 🔑 SSH / KEYS / CREDENTIALS
+# ===========================
+
+# SSH keys
+*.pem
+*.pub
+*.key
+*.ppk
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+
+# AWS credentials or config files
+.aws/
+credentials/
+config/
+
+# Output or temporary files containing secrets
+*.log
+*.bak
+*.tmp
+*.swp
+
+# ===========================
+# 🐳 DOCKER / COMPOSE / BUILD
+# ===========================
+
+# Docker build context and temporary files
+**/docker-compose.override.yml
+**/docker-compose.local.yml
+**/docker-compose-dev.yml
+**/docker-compose.override.yaml
+
+# Docker volumes or container data
+docker-data/
+volumes/
+db_data/
+logs/
+
+# Docker environment files
+.env
+.env.*
+
+# ===========================
+# 📦 PYTHON / SUPERSET BUILD
+# ===========================
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+*.coverage
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+pip-wheel-metadata/
+
+# Superset-related build files
+superset_home/
+superset_config.py
+instance/
+*.db
+
+# ===========================
+# 💾 BACKUPS / MISC
+# ===========================
+
+# OS or editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.code-workspace
+
+# Archives and compressed files
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+
+# Local test files or outputs
+tmp/
+temp/
+output/
+test-output/
+*.bak
+*.old
+*.retry
+
