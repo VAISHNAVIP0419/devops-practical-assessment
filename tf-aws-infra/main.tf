@@ -36,6 +36,7 @@ module "iam" {
   name_prefix = "${var.name_prefix}-iam"
   bucket_name = module.s3.bucket_name
   bucket_arn  = module.s3.bucket_arn
+  s3_bucket_arn = module.s3.bucket_arn
   tags        = var.common_tags
 }
 
@@ -51,7 +52,7 @@ module "ebs" {
 module "ec2_app" {
   source                = "./modules/ec2"
   name                  = "tf-assessment-app"
-  ami                   = ""
+  ami                   = "ami-0f58b397bc5c1f2e8"
   instance_type         = "t3.medium"
   subnet_id             = element(module.vpc.private_subnet_ids, 0)
   security_group_ids    = [module.vpc.sg_app_id]
@@ -67,7 +68,7 @@ module "ec2_bastion" {
   source = "./modules/ec2"
 
   name                  = "${var.name_prefix}-bastion"
-  ami                   = var.ami_id
+  ami                   = "ami-0f58b397bc5c1f2e8"
   instance_type         = "t2.micro"
   subnet_id             = element(module.vpc.public_subnet_ids, 0)
   security_group_ids    = [module.vpc.bastion_sg_id]

@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.5.0"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -13,19 +15,15 @@ terraform {
       version = "~> 2.11"
     }
   }
+
+  backend "s3" {
+    bucket = "tf-assessment-state-0ad137f4" # your S3 bucket name
+    key    = "eks/terraform.tfstate"
+    region = "ap-south-1"
+  }
 }
 
+# --- AWS Provider ---
 provider "aws" {
   region = var.aws_region
-}
-
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "aws"
-    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
-  }
 }

@@ -1,19 +1,15 @@
-output "kubeconfig_command" {
-  value = "aws eks update-kubeconfig --region ${var.aws_region} --name ${module.eks.cluster_id}"
+output "cluster_id" {
+  value = module.eks.cluster_id
 }
 
-output "alb_irsa_role_arn" {
-  value = aws_iam_role.alb_irsa_role.arn
+output "cluster_endpoint" {
+  value = module.eks.cluster_endpoint
 }
 
-output "autoscaler_irsa_role_arn" {
-  value = aws_iam_role.autoscaler_irsa_role.arn
+output "cluster_certificate_authority_data" {
+  value = module.eks.cluster_certificate_authority_data
 }
 
-output "vpc_id" {
-  value = var.vpc_info.vpc_id
-}
-
-output "private_subnets" {
-  value = var.vpc_info.private_subnet_ids
+output "node_group_role_arn" {
+  value = module.eks.eks_managed_node_groups["general"].iam_role_arn
 }

@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "s3_access" {
           "s3:PutObject"
         ]
         Resource = [
-          "${var.s3_bucket_arn}/*"
+          "${var.s3_bucket_arn != "" ? var.s3_bucket_arn : var.bucket_arn}/*"
         ]
       }
     ]
