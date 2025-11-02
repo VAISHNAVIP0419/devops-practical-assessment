@@ -1,5 +1,5 @@
 resource "aws_instance" "this" {
-  ami                    = var.ami != "" ? var.ami : "ami-0f58b397bc5c1f2e8"
+  ami                    = var.ami != "" ? var.ami : "ami-02b8269d5e85954ef"
   instance_type          = var.instance_type
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.security_group_ids

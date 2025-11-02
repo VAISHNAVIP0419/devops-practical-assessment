@@ -1,7 +1,7 @@
 variable "name" {}
 variable "ami" {
   type = string
-  default = "ami-0f58b397bc5c1f2e8"
+  default = "ami-02b8269d5e85954ef"
 }
 variable "instance_type" {}
 variable "subnet_id" {}

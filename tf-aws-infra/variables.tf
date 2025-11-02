@@ -63,7 +63,7 @@ variable "create_bucket_name" {
 # EC2 AMI: optional override. If empty the ec2 module will lookup Amazon Linux 2 latest.
 variable "ami_id" {
   type    = string
-  default = "ami-0f58b397bc5c1f2e8"
+  default = "ami-02b8269d5e85954ef"
 }
 
 variable "common_tags" {

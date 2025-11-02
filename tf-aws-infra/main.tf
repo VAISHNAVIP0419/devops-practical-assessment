@@ -52,7 +52,7 @@ module "ebs" {
 module "ec2_app" {
   source                = "./modules/ec2"
   name                  = "tf-assessment-app"
-  ami                   = "ami-0f58b397bc5c1f2e8"
+  ami                   = "ami-02b8269d5e85954ef"
   instance_type         = "t3.medium"
   subnet_id             = element(module.vpc.private_subnet_ids, 0)
   security_group_ids    = [module.vpc.sg_app_id]
@@ -68,7 +68,7 @@ module "ec2_bastion" {
   source = "./modules/ec2"
 
   name                  = "${var.name_prefix}-bastion"
-  ami                   = "ami-0f58b397bc5c1f2e8"
+  ami                   = "ami-02b8269d5e85954ef"
   instance_type         = "t2.micro"
   subnet_id             = element(module.vpc.public_subnet_ids, 0)
   security_group_ids    = [module.vpc.bastion_sg_id]
