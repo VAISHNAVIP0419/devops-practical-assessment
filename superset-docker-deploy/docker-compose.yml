@@ -1,10 +1,4 @@
-version: "3.8"
-
-networks:
-  superset_net:
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+version: "3.9"
 
 services:
   db:
@@ -21,10 +15,11 @@ services:
         ipv4_address: 172.28.0.2
 
   superset:
-    image: pawarsanika/superset-custom:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    image: vaishnavi2301/superset-custom:latest
     container_name: superset_app
-    ports:
-      - "8088:8088"
     environment:
       SUPERSET_ENV: production
       SUPERSET_SECRET_KEY: "super_secret_key"
@@ -47,8 +42,10 @@ services:
     container_name: superset_nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d
+      - ./certs:/etc/nginx/certs:ro
     depends_on:
       - superset
     networks:
@@ -58,3 +55,11 @@ services:
 volumes:
   superset_home:
   superset_db_data:
+
+networks:
+  superset_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+

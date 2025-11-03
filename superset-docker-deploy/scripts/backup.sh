@@ -1,16 +1,15 @@
 #!/bin/bash
+set -e
 
-# Backup folder path
-BACKUP_DIR="/backup"
-DATE=$(date +"%Y%m%d_%H%M%S")
-DB_NAME="superset_db"
-BACKUP_FILE="$BACKUP_DIR/${DB_NAME}_backup_$DATE.sql"
+BACKUP_DIR="./backups"
+DATE=$(date +%F_%H%M)
+DB_CONTAINER="superset_db"
+DB_NAME="superset"
+DB_USER="superset"
 
-# Create backup directory if it doesn’t exist
-mkdir -p $BACKUP_DIR
+mkdir -p "$BACKUP_DIR"
 
-# Run PostgreSQL dump
 echo "Starting backup..."
-docker exec -t superset_postgres pg_dump -U superset $DB_NAME > $BACKUP_FILE
+docker exec -t "$DB_CONTAINER" pg_dump -U "$DB_USER" "$DB_NAME" > "$BACKUP_DIR/${DB_NAME}_$DATE.sql"
+echo "Backup saved in $BACKUP_DIR/${DB_NAME}_$DATE.sql"
 
-echo "Backup completed: $BACKUP_FILE"
