@@ -7,7 +7,7 @@ resource "helm_release" "cluster_autoscaler" {
   values = [
     yamlencode({
       autoDiscovery = {
-        clusterName = module.eks.cluster_id
+        clusterName = module.eks.cluster_name
       }
       awsRegion = var.aws_region
       rbac = {

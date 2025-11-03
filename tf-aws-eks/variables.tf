@@ -5,24 +5,24 @@ variable "aws_region" {
 
 # ----------- VPC & Subnets from your infra output -----------
 variable "vpc_id" {
-  default = "vpc-0d25245f8ff004869"
+  default = "vpc-061debf44eb7259d0"
 }
 
 variable "private_subnet_ids" {
   type = list(string)
   default = [
-    "subnet-0940f94afeee87734",
-    "subnet-06599f80ba5134380",
-    "subnet-0e8c746e53f5195c6",
-    "subnet-0daac463704e71d1c"
+    "subnet-06d0bcab2e359f091",
+    "subnet-06422d3c5976557f9",
+    "subnet-098fe6987f1cb5ae8",
+    "subnet-0ba4802965d0281af"
   ]
 }
 
 variable "public_subnet_ids" {
   type = list(string)
   default = [
-    "subnet-0cf53e0aef986e280",
-    "subnet-0bd10ae3d2371bd61"
+    "subnet-081f112d32f99942e",
+    "subnet-058d890fccc268327"
   ]
 }
 

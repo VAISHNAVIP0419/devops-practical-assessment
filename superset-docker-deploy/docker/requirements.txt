@@ -1,0 +1,4 @@
+# Trino and Oracle database drivers for Superset
+trino
+cx_Oracle
+oracledb

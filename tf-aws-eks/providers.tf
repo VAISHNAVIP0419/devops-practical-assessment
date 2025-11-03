@@ -16,9 +16,9 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "tf-assessment-state-0ad137f4" # your S3 bucket name
-    key    = "eks/terraform.tfstate"
+   backend "s3" {
+    bucket = "tf-assessment-state-2cd3a1d0" # your S3 bucket name
+     key    = "eks/terraform.tfstate"
     region = "ap-south-1"
   }
 }
