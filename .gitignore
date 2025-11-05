@@ -1,1 +1,127 @@
 superset-docker-deploy/certs/*.pem
+# -----------------------------
+# Global & System Ignored Files
+# -----------------------------
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# OS / Editor / IDE
+# -----------------------------
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# -----------------------------
+# Python (if any scripts)
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+venv/
+env/
+
+# -----------------------------
+# Terraform
+# -----------------------------
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# -----------------------------
+# AWS CLI / Credentials
+# -----------------------------
+.aws/
+*.pem
+*.key
+*.crt
+*.csr
+
+# -----------------------------
+# Docker
+# -----------------------------
+**/docker/*.log
+**/docker/*.pid
+**/docker-compose.override.yml
+**/compose/.env
+**/compose/tmp/
+**/compose/logs/
+**/compose/data/
+**/certs/*.pem
+**/certs/*.crt
+**/certs/*.key
+
+# -----------------------------
+# Node / React Apps (Frontend)
+# -----------------------------
+**/node_modules/
+**/build/
+**/dist/
+**/.parcel-cache/
+**/.next/
+**/.nuxt/
+**/coverage/
+
+# -----------------------------
+# Superset Deployment
+# -----------------------------
+superset_home/
+superset.db
+*.db
+**/superset-docker-deploy/certs/
+**/superset-docker-deploy/compose/.env
+
+# -----------------------------
+# Jenkins / CI
+# -----------------------------
+**/Jenkins-Server-TF/tools-install.sh.log
+**/jenkins_home/
+**/jobs/
+**/workspace/
+
+# -----------------------------
+# Kubernetes / Helm
+# -----------------------------
+**/*.bak
+**/*.retry
+**/.helm/
+**/helm_chart_k8s/charts/*.tgz
+
+# -----------------------------
+# Other local files
+# -----------------------------
+awscliv2.zip
+eksctl_Linux_amd64.tar.gz
+kubectl
+aws/
+
+# -----------------------------
+# Backup & Temporary Scripts
+# -----------------------------
+**/scripts/backup.sh
+backup/
+tmp/
+logs/
+
