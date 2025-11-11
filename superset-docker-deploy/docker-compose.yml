@@ -1,65 +1,105 @@
 version: "3.9"
 
 services:
+  # SERVICE 1: PostgreSQL DATABASE
+  # Purpose: Store Superset metadata, dashboards, users, queries
+  # Image: postgres:15 (latest stable PostgreSQL)
+  # Network IP: 172.28.0.2
   db:
     image: postgres:15
     container_name: superset_db
+    
+    # Environment Variables - PostgreSQL configuration
     environment:
-      POSTGRES_DB: superset
-      POSTGRES_USER: superset
-      POSTGRES_PASSWORD: superset
+      POSTGRES_DB: superset              # Database name
+      POSTGRES_USER: superset            # Database user
+      POSTGRES_PASSWORD: superset        # Database password (change in production!)
+    
+    # Persistent Storage - Database data survives container restart
     volumes:
-      - superset_db_data:/var/lib/postgresql/data
+      - superset_db_data:/var/lib/postgresql/data  # Named volume for DB data
+    
+    # Custom Network - Uses specific subnet (172.28.0.0/16)
     networks:
       superset_net:
-        ipv4_address: 172.28.0.2
+        ipv4_address: 172.28.0.2         # Fixed IP for database
 
+
+  # SERVICE 2: SUPERSET APPLICATION
+  # Image: Custom image with Trino and Oracle drivers
+  # Network IP: 172.28.0.3
   superset:
     build:
-      context: ./docker
-      dockerfile: Dockerfile
-    image: vaishnavi2301/superset-custom:latest
+      context: ./docker                  # Directory containing Dockerfile
+      dockerfile: Dockerfile             # Build using custom Dockerfile
+    
+    image: vaishnavi2301/superset-custom:latest  # Tag for DockerHub push
     container_name: superset_app
+    
+    # Environment Variables - Superset configuration
     environment:
-      SUPERSET_ENV: production
-      SUPERSET_SECRET_KEY: "super_secret_key"
-      DATABASE_DIALECT: postgresql
-      DATABASE_USER: superset
-      DATABASE_PASSWORD: superset
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_DB: superset
+      SUPERSET_ENV: production           # Production mode (vs development)
+      SUPERSET_SECRET_KEY: "super_secret_key"  # Secret key (change in production!)
+      
+      # Database Connection - Tells Superset how to connect to PostgreSQL
+      DATABASE_DIALECT: postgresql       # Database type
+      DATABASE_USER: superset            # Must match db service user
+      DATABASE_PASSWORD: superset        # Must match db service password
+      DATABASE_HOST: db                  # Service name (Docker DNS resolves to 172.28.0.2)
+      DATABASE_PORT: 5432               # PostgreSQL default port
+      DATABASE_DB: superset              # Database name to use
+    
+    # Service Dependencies - Wait for db to be healthy before starting
     depends_on:
-      - db
+      - db                               # Superset requires database service
+    
+    # Persistent Storage - Superset home directory (configs, cache)
     volumes:
-      - superset_home:/app/superset_home
+      - superset_home:/app/superset_home  # Named volume for Superset data
+    
+    # Custom Network - Same subnet as database for inter-service communication
     networks:
       superset_net:
-        ipv4_address: 172.28.0.3
+        ipv4_address: 172.28.0.3         # Fixed IP for Superset application
 
+
+  # SERVICE 3: NGINX REVERSE PROXY
+  # Purpose: HTTPS/SSL termination, load balancing, routing
+  # Image: nginx:latest (official Nginx)
+  # Network IP: 172.28.0.4
+  # Ports: 80 (HTTP redirect) and 443 (HTTPS)
   nginx:
     image: nginx:latest
     container_name: superset_nginx
+    
+    # Port Mappings - External host ports to container ports
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"                          # HTTP traffic (redirects to HTTPS)
+      - "443:443"                        # HTTPS traffic (SSL encrypted)
+    
+    # Configuration and Certificates - Mount from host
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./certs:/etc/nginx/certs:ro
+      - ./nginx:/etc/nginx/conf.d        # Nginx config directory (default.conf)
+      - ./certs:/etc/nginx/certs:ro      # SSL certificates (read-only)
+    
     depends_on:
-      - superset
+      - superset                         # Nginx requires Superset service
+    
+    # Custom Network - Routes requests to Superset on 172.28.0.3:8088
     networks:
       superset_net:
-        ipv4_address: 172.28.0.4
-
+        ipv4_address: 172.28.0.4         # Fixed IP for Nginx
 volumes:
-  superset_home:
-  superset_db_data:
+  superset_home:                         # Superset configuration and cache
+  superset_db_data:                      # PostgreSQL database files
+
+# CUSTOM DOCKER NETWORK
 
 networks:
   superset_net:
-    ipam:
-      driver: default
+    ipam:                               # IP Address Management
+      driver: default                   # Default IPAM driver
       config:
-        - subnet: 172.28.0.0/16
+        - subnet: 172.28.0.0/16        # Custom subnet (supports 65,534 IPs)
+                                        # Range: 172.28.0.1 - 172.28.255.254
 

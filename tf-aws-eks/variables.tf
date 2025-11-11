@@ -1,15 +1,19 @@
-# ----------- AWS Basic Configuration -----------
+# AWS region for EKS cluster deployment
 variable "aws_region" {
-  default = "ap-south-1"
+  description = "AWS region (ap-south-1)"
+  default     = "ap-south-1"
 }
 
-# ----------- VPC & Subnets from your infra output -----------
+# VPC ID from tf-aws-infra outputs - cluster launches within existing VPC
 variable "vpc_id" {
-  default = "vpc-061debf44eb7259d0"
+  description = "VPC ID for EKS cluster placement"
+  default     = "vpc-061debf44eb7259d0"
 }
 
+# Private subnets for EKS nodes - isolated from internet
 variable "private_subnet_ids" {
-  type = list(string)
+  description = "Private subnets for worker node placement"
+  type        = list(string)
   default = [
     "subnet-06d0bcab2e359f091",
     "subnet-06422d3c5976557f9",
@@ -18,36 +22,35 @@ variable "private_subnet_ids" {
   ]
 }
 
+# Public subnets for EKS control plane load balancer
 variable "public_subnet_ids" {
-  type = list(string)
+  description = "Public subnets for ALB/NLB ingress controllers"
+  type        = list(string)
   default = [
     "subnet-081f112d32f99942e",
     "subnet-058d890fccc268327"
   ]
 }
 
-# ----------- EKS Cluster Settings -----------
+# EKS cluster identifier - referenced in kubectl config
 variable "cluster_name" {
-  default = "tf-eks-cluster"
+  description = "EKS cluster name"
+  default     = "tf-eks-cluster"
 }
 
+# Kubernetes version - latest recommended version
 variable "cluster_version" {
-  default = "1.30"
+  description = "Kubernetes version for EKS (latest stable)"
+  default     = "1.30"
 }
 
-# ----------- Node Group Settings -----------
+# EC2 instance type for worker nodes
 variable "node_instance_type" {
-  default = "t3.medium"
+  description = "Worker node instance type (t3.medium sufficient for 3-tier app)"
+  default     = "t3.medium"
 }
-
-variable "desired_capacity" {
-  default = 2
-}
-
-variable "max_capacity" {
-  default = 4
-}
-
-variable "min_capacity" {
-  default = 1
+# node count 
+variable "node_count" {
+  description = "Number of worker nodes to create"
+  default     = 2
 }

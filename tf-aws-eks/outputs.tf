@@ -1,15 +1,18 @@
+# EKS cluster name - used in: aws eks update-kubeconfig --cluster-name <value>
 output "cluster_id" {
-  value = module.eks.cluster_id
+  description = "EKS cluster name for kubectl config"
+  value       = module.eks.cluster_id
 }
 
+# Kubernetes API endpoint - used by kubectl for API calls
 output "cluster_endpoint" {
-  value = module.eks.cluster_endpoint
+  description = "Kubernetes API server endpoint"
+  value       = module.eks.cluster_endpoint
 }
 
+# Certificate Authority data for secure API authentication
 output "cluster_certificate_authority_data" {
-  value = module.eks.cluster_certificate_authority_data
+  description = "Base64 encoded CA certificate for cluster API"
+  value       = module.eks.cluster_certificate_authority_data
 }
 
-output "node_group_role_arn" {
-  value = module.eks.eks_managed_node_groups["general"].iam_role_arn
-}

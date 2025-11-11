@@ -1,6 +1,7 @@
 terraform {
   required_version = ">= 1.5.0"
 
+  # Providers: AWS for infrastructure, Kubernetes for kubectl, Helm for charts
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,14 +17,15 @@ terraform {
     }
   }
 
-   backend "s3" {
-    bucket = "tf-assessment-state-2cd3a1d0" # your S3 bucket name
-     key    = "eks/terraform.tfstate"
+  # Remote state backend - shared S3 bucket with tf-aws-infra
+  backend "s3" {
+    bucket = "tf-assessment-state-2cd3a1d0"  # Update with your S3 bucket
+    key    = "eks/terraform.tfstate"          # Separate state for EKS
     region = "ap-south-1"
   }
 }
 
-# --- AWS Provider ---
+# AWS provider for EKS, VPC, IAM resource creation
 provider "aws" {
   region = var.aws_region
 }

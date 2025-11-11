@@ -1,5 +1,27 @@
+# ===============================================
+# Git Ignore Configuration
+# ===============================================
+# This file specifies files/directories to exclude from Git version control
+# Prevents committing sensitive data, generated files, and large data
+
+# Python Cache Files
+# __pycache__/ - Compiled Python bytecode
+# *.pyc - Individual compiled Python files
 __pycache__/
 *.pyc
+
+# Environment Variables
+# .env - Contains sensitive credentials (passwords, API keys)
+# Should never be committed to version control
 .env
+
+# Backup Directories
+# backup/ - Database backups with sensitive data
+# backups/ - Alternative backup directory name
 backup/
+backups/
+
+# Database Files
+# db_data/ - PostgreSQL database files (large, regenerated)
+# Can be massive and should not be in Git
 db_data/

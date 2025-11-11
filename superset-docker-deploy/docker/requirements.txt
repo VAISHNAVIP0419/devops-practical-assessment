@@ -1,4 +1,8 @@
-# Trino and Oracle database drivers for Superset
+# Python dependencies for Superset custom image
+
+# Trino driver - for connecting Superset to Trino
 trino
+
+# Oracle drivers - for connecting to Oracle databases
 cx_Oracle
 oracledb

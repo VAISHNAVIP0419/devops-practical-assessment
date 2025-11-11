@@ -1,15 +1,19 @@
 #!/bin/bash
-set -e
+set -e   # Exit if any command fails
 
-BACKUP_DIR="./backups"
-DATE=$(date +%F_%H%M)
-DB_CONTAINER="superset_db"
-DB_NAME="superset"
-DB_USER="superset"
+# ---------- CONFIG ----------
+BACKUP_DIR="./backups"               # Backup location
+DATE=$(date +%F_%H%M)                # Timestamp (YYYY-MM-DD_HHMM)
+DB_CONTAINER="superset_db"           # Docker container name
+DB_NAME="superset"                   # Database name
+DB_USER="superset"                   # Database user
 
-mkdir -p "$BACKUP_DIR"
+# ---------- SETUP ----------
+mkdir -p "$BACKUP_DIR"               # Create dir if not exists
 
+# ---------- BACKUP ----------
 echo "Starting backup..."
 docker exec -t "$DB_CONTAINER" pg_dump -U "$DB_USER" "$DB_NAME" > "$BACKUP_DIR/${DB_NAME}_$DATE.sql"
-echo "Backup saved in $BACKUP_DIR/${DB_NAME}_$DATE.sql"
 
+# ---------- DONE ----------
+echo "Backup saved in $BACKUP_DIR/${DB_NAME}_$DATE.sql"
