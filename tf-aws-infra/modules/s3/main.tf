@@ -1,12 +1,4 @@
-# ===============================================
-# S3 MODULE - MAIN CONFIGURATION
-# ===============================================
-# This module creates an S3 bucket with optional versioning
-# S3 is used for storing Terraform state and application data
-
-# ============================================================
 # RANDOM SUFFIX GENERATION
-# ============================================================
 # Generates a random suffix for bucket name uniqueness
 # S3 bucket names must be globally unique across all AWS accounts
 # Conditional: only creates if var.bucket_name is not provided
@@ -15,9 +7,7 @@ resource "random_id" "suffix" {
   byte_length = 4                               # 4 bytes = 8 hex characters
 }
 
-# ============================================================
-# BUCKET NAME DETERMINATION
-# ============================================================
+# BUCKET NAME 
 # Uses provided bucket name or generates one with random suffix
 # Example:
 #   - If bucket_name = "my-bucket" → uses "my-bucket"
@@ -26,9 +16,7 @@ locals {
   bucket_name_final = var.bucket_name != "" ? var.bucket_name : "${var.bucket_prefix}-${random_id.suffix[0].hex}"
 }
 
-# ============================================================
 # S3 BUCKET CREATION
-# ============================================================
 # Creates the S3 bucket for storing Terraform state and data
 resource "aws_s3_bucket" "this" {
   bucket        = local.bucket_name_final    # Final bucket name (user-provided or auto-generated)
