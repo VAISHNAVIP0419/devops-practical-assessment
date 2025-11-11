@@ -3,112 +3,112 @@
 
 # Global namespace configuration
 namespace:
-  name: three-tier
-  create: true
+  name: three-tier  # Kubernetes namespace for all resources
+  create: true      # Create namespace if it doesn't exist
 
-# Image pull secrets for private registries
+# Image pull secrets for private registries (ECR)
 imagePullSecrets:
-  - name: ecr-registry-secret
+  - name: ecr-registry-secret  # Secret must exist in target namespace
 
 # Frontend (React) Configuration
 frontend:
-  enabled: true
-  replicaCount: 1
+  enabled: true           # Enable/disable frontend deployment
+  replicaCount: 1         # Number of frontend pod replicas
   image:
     repository: 047719648597.dkr.ecr.ap-south-1.amazonaws.com/three-tire-app-frontend
-    tag: latest
-    pullPolicy: Always
+    tag: latest           # Image tag (use specific version in production)
+    pullPolicy: Always    # Always pull image from registry
   service:
-    type: ClusterIP
-    port: 3000
+    type: ClusterIP       # Service type (internal access)
+    port: 3000            # Frontend service port
   env:
-    REACT_APP_BACKEND_URL: "/api/tasks"
+    REACT_APP_BACKEND_URL: "/api/tasks"  # Backend API endpoint for frontend
 
 # Backend (Node.js/Express) Configuration
 backend:
-  enabled: true
-  replicaCount: 2
+  enabled: true           # Enable/disable backend deployment
+  replicaCount: 2         # Number of backend pod replicas for load distribution
   image:
     repository: 047719648597.dkr.ecr.ap-south-1.amazonaws.com/three-tire-app-backend
-    tag: latest
+    tag: latest           # Image tag (use specific version in production)
     pullPolicy: Always
   service:
-    type: ClusterIP
-    port: 3500
+    type: ClusterIP       # Service type (internal access)
+    port: 3500            # Backend API port
   env:
-    MONGO_CONN_STR: "mongodb://mongodb-svc:27017/todo?directConnection=true"
+    MONGO_CONN_STR: "mongodb://mongodb-svc:27017/todo?directConnection=true"  # MongoDB connection string
   mongoSecret:
-    name: mongo-sec
-    usernameKey: username
-    passwordKey: password
+    name: mongo-sec       # Secret name containing MongoDB credentials
+    usernameKey: username # Key for MongoDB username in secret
+    passwordKey: password # Key for MongoDB password in secret
   probes:
     liveness:
-      path: /healthz
+      path: /healthz      # Endpoint for liveness check (pod health)
       port: 3500
-      initialDelaySeconds: 5
-      periodSeconds: 10
+      initialDelaySeconds: 5    # Wait before first check
+      periodSeconds: 10         # Check every 10 seconds
     readiness:
-      path: /ready
+      path: /ready        # Endpoint for readiness check (traffic ready)
       port: 3500
       initialDelaySeconds: 5
-      periodSeconds: 5
+      periodSeconds: 5          # Frequent readiness checks
     startup:
-      path: /started
+      path: /started      # Endpoint for startup check (initialization)
       port: 3500
       initialDelaySeconds: 0
       periodSeconds: 10
-      failureThreshold: 30
+      failureThreshold: 30      # Allow 30 failures before giving up
 
 # MongoDB Database Configuration
 mongodb:
-  enabled: true
-  replicaCount: 1
+  enabled: true           # Enable/disable MongoDB deployment
+  replicaCount: 1         # Single MongoDB instance (use replica set for production HA)
   image:
-    repository: mongo
-    tag: "4.4.6"
+    repository: mongo     # Official MongoDB image
+    tag: "4.4.6"          # Specific MongoDB version
     pullPolicy: IfNotPresent
   service:
-    type: ClusterIP
-    port: 27017
+    type: ClusterIP       # Service type
+    port: 27017           # MongoDB default port
   mongoSecret:
-    name: mongo-sec
+    name: mongo-sec       # Secret with credentials
     usernameKey: username
     passwordKey: password
   persistence:
-    enabled: true
-    size: 1Gi
-    storageClassName: ""  # Use default StorageClass if empty
+    enabled: true         # Use persistent storage for database
+    size: 1Gi             # PVC size (adjust based on data needs)
+    storageClassName: ""  # Empty = use cluster default StorageClass
   mongodbSettings:
-    cacheSizeGB: "0.1"
-    bindIp: "0.0.0.0"
+    cacheSizeGB: "0.1"    # WiredTiger cache size (0.1GB for small deployments)
+    bindIp: "0.0.0.0"     # Bind to all interfaces
 
-# Ingress Configuration (ALB)
+# Ingress Configuration (AWS ALB)
 ingress:
-  enabled: true
-  className: alb
+  enabled: true           # Enable/disable ALB ingress
+  className: alb          # AWS Load Balancer Controller class
   annotations:
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing    # Public ALB
+    alb.ingress.kubernetes.io/target-type: ip            # Target pods directly
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'  # Listen on HTTP 80
 
 # Cluster Autoscaler Configuration
 autoscaler:
-  enabled: false
-  clusterName: "three-tier-eks"
+  enabled: false          # Disable by default (enable if using auto-scaling node groups)
+  clusterName: "three-tier-eks"  # EKS cluster name for autoscaler discovery
   image:
     repository: registry.k8s.io/autoscaling/cluster-autoscaler
-    tag: v1.32.1
+    tag: v1.32.1          # Autoscaler version (match Kubernetes version)
     pullPolicy: Always
   resources:
     limits:
-      cpu: 100m
-      memory: 600Mi
+      cpu: 100m           # Max CPU usage
+      memory: 600Mi        # Max memory usage
     requests:
-      cpu: 100m
-      memory: 600Mi
+      cpu: 100m           # Requested CPU (guaranteed)
+      memory: 600Mi        # Requested memory
 
-# Resource limits for pods (optional)
+# Resource limits for application pods (optional)
 resources: {}
   # limits:
   #   cpu: 100m
@@ -118,6 +118,6 @@ resources: {}
   #   memory: 128Mi
 
 # Node selection and affinity rules
-nodeSelector: {}
-tolerations: []
+nodeSelector: {}          # Select specific nodes by labels
+tolerations: []           # Tolerate node taints
 affinity: {}

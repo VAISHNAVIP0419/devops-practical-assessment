@@ -1,4 +1,5 @@
 {{- if .Values.mongodb.enabled }}
+# MongoDB Service - Exposes database on port 27017 (internal only)
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,4 +1,5 @@
 {{- if .Values.frontend.enabled }}
+# Frontend (React) Deployment - Serves the web UI
 apiVersion: apps/v1
 kind: Deployment
 metadata:

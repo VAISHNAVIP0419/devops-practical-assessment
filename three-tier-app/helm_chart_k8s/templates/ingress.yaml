@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled }}
+# AWS ALB Ingress - Routes traffic from ALB to frontend and backend services
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

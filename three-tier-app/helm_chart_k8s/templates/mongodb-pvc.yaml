@@ -1,5 +1,6 @@
 {{- if .Values.mongodb.enabled }}
 {{- if .Values.mongodb.persistence.enabled }}
+# MongoDB PersistentVolumeClaim - Storage for MongoDB data
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

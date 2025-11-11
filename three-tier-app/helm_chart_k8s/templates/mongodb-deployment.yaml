@@ -1,4 +1,5 @@
 {{- if .Values.mongodb.enabled }}
+# MongoDB Deployment - NoSQL database for application data
 apiVersion: apps/v1
 kind: Deployment
 metadata:

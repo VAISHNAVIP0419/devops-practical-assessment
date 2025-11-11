@@ -1,24 +1,13 @@
+# Helm Chart metadata for Three-Tier MERN Application
 apiVersion: v2
 name: helm_chart_k8s
-description: A Helm chart for Kubernetes
+description: Production-ready Helm chart for three-tier MERN application on Kubernetes
 
-# A chart can be either an 'application' or a 'library' chart.
-#
-# Application charts are a collection of templates that can be packaged into versioned archives
-# to be deployed.
-#
-# Library charts provide useful utilities or functions for the chart developer. They're included as
-# a dependency of application charts to inject those utilities and functions into the rendering
-# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+# Application chart - packages templates for deployment
 type: application
 
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
+# Chart version - increment on template/configuration changes
 version: 0.1.0
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
+# Application version - version of the three-tier app being deployed
 appVersion: "1.16.0"

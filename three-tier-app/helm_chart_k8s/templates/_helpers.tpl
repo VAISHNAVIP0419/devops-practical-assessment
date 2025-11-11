@@ -29,7 +29,7 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Common labels
+Common labels for all Kubernetes resources.
 */}}
 {{- define "helm_chart_k8s.labels" -}}
 helm.sh/chart: {{ include "helm_chart_k8s.chart" . }}
@@ -41,7 +41,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels for pod matching and service discovery.
 */}}
 {{- define "helm_chart_k8s.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "helm_chart_k8s.name" . }}

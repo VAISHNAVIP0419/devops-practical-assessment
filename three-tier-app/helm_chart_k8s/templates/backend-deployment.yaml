@@ -1,4 +1,5 @@
 {{- if .Values.backend.enabled }}
+# Backend (Node.js API) Deployment - REST API server with health probes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
