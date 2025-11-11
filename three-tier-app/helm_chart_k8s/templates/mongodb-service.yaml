@@ -1,0 +1,19 @@
+{{- if .Values.mongodb.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "helm_chart_k8s.labels" . | nindent 4 }}
+    app: mongodb
+spec:
+  type: {{ .Values.mongodb.service.type }}
+  ports:
+    - name: mongodb
+      port: {{ .Values.mongodb.service.port }}
+      targetPort: mongodb
+      protocol: TCP
+  selector:
+    app: mongodb
+{{- end }}

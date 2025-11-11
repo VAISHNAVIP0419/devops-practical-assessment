@@ -1,3 +1,4 @@
+{{- if .Values.autoscaler.enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -80,7 +81,6 @@ rules:
     resources: ["configmaps"]
     resourceNames: ["cluster-autoscaler-status", "cluster-autoscaler-priority-expander"]
     verbs: ["delete", "get", "update", "watch"]
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -97,7 +97,6 @@ subjects:
   - kind: ServiceAccount
     name: cluster-autoscaler
     namespace: kube-system
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -115,7 +114,6 @@ subjects:
   - kind: ServiceAccount
     name: cluster-autoscaler
     namespace: kube-system
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -146,15 +144,11 @@ spec:
           type: RuntimeDefault
       serviceAccountName: cluster-autoscaler
       containers:
-        - image: registry.k8s.io/autoscaling/cluster-autoscaler:v1.32.1
+        - image: "{{ .Values.autoscaler.image.repository }}:{{ .Values.autoscaler.image.tag }}"
+          imagePullPolicy: {{ .Values.autoscaler.image.pullPolicy }}
           name: cluster-autoscaler
           resources:
-            limits:
-              cpu: 100m
-              memory: 600Mi
-            requests:
-              cpu: 100m
-              memory: 600Mi
+            {{- toYaml .Values.autoscaler.resources | nindent 12 }}
           command:
             - ./cluster-autoscaler
             - --v=4
@@ -162,12 +156,11 @@ spec:
             - --cloud-provider=aws
             - --skip-nodes-with-local-storage=false
             - --expander=least-waste
-            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/<YOUR CLUSTER NAME>
+            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/{{ .Values.autoscaler.clusterName }}
           volumeMounts:
             - name: ssl-certs
-              mountPath: /etc/ssl/certs/ca-certificates.crt # /etc/ssl/certs/ca-bundle.crt for Amazon Linux Worker Nodes
+              mountPath: /etc/ssl/certs/ca-bundle.crt
               readOnly: true
-          imagePullPolicy: "Always"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -178,3 +171,4 @@ spec:
         - name: ssl-certs
           hostPath:
             path: "/etc/ssl/certs/ca-bundle.crt"
+{{- end }}

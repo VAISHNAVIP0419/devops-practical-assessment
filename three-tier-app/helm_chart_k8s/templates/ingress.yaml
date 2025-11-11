@@ -1,15 +1,17 @@
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mainlb
-  namespace: three-tier
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "helm_chart_k8s.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  ingressClassName: alb
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
     - http:
         paths:
@@ -19,32 +21,33 @@ spec:
               service:
                 name: api
                 port:
-                  number: 3500
+                  number: {{ .Values.backend.service.port }}
           - path: /healthz
             pathType: Exact
             backend:
               service:
                 name: api
                 port:
-                  number: 3500
+                  number: {{ .Values.backend.service.port }}
           - path: /ready
             pathType: Exact
             backend:
               service:
                 name: api
                 port:
-                  number: 3500
+                  number: {{ .Values.backend.service.port }}
           - path: /started
             pathType: Exact
             backend:
               service:
                 name: api
                 port:
-                  number: 3500
+                  number: {{ .Values.backend.service.port }}
           - path: /
             pathType: Prefix
             backend:
               service:
                 name: frontend
                 port:
-                  number: 3000
+                  number: {{ .Values.frontend.service.port }}
+{{- end }}
